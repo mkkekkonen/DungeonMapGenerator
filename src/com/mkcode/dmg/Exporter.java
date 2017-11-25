@@ -2,6 +2,7 @@ package com.mkcode.dmg;
 
 import java.util.List;
 
+import com.mkcode.dmg.maps.Door;
 import com.mkcode.dmg.maps.Map;
 import com.mkcode.dmg.maps.Room;
 import com.mkcode.dmg.util.Coords;
@@ -25,8 +26,11 @@ public class Exporter {
 		for(int i = 0; i < maps.size(); i++) {
 			mapsStringBuilder.append("Map " + (i + 1) + "\n\n");
 			if(DEBUG) {
-				for(Room room : maps.get(i).getRooms())
-					mapsStringBuilder.append(room.toString() + "\n");
+//				for(Room room : maps.get(i).getRooms())
+//					mapsStringBuilder.append(room.toString() + "\n");
+//				mapsStringBuilder.append("\n");
+				for(Door door : maps.get(i).getDoors())
+					mapsStringBuilder.append(door.toString() + "\n");
 			}
 			mapsStringBuilder.append("\n");
 			mapsStringBuilder.append(exportMapToText(maps.get(i)));
@@ -42,7 +46,10 @@ public class Exporter {
 		
 		for(int y = 0; y < map.getH(); y++) {
 			for(int x = 0; x < map.getW(); x++) {
-				if(map.isWall(new Coords(x, y)))
+				Coords coords = new Coords(x, y); 
+				if(map.isDoor(coords))
+					mapStringBuilder.append("+");
+				else if(map.isWall(coords))
 					mapStringBuilder.append("#");
 				else
 					mapStringBuilder.append(".");

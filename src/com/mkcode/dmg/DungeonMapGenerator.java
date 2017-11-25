@@ -32,13 +32,13 @@ public class DungeonMapGenerator {
 		
 //		System.out.println("width: " + width + " height: " + height + " floors: " + floors);
 		
-		Generator mapGenerator = new Generator();
-		List<Map> maps = mapGenerator.generateMaps(width, height, floors);
+		Generator mapGenerator = new Generator(width, height, floors);
+		List<Map> maps = mapGenerator.generateMaps();
 		
 		Exporter mapExporter = new Exporter();
 		
 		if(argsList.contains("-c"))
-			System.out.println(mapExporter.exportToText(maps));
+			mapExporter.exportToConsole(maps);
 		else
 			System.out.println("No export option selected, quitting");
 	}

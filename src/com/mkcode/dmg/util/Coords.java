@@ -13,7 +13,16 @@ public class Coords {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public boolean equalz(Coords coords) {
+		return x == coords.getX() && y == coords.getY();
+	}
 
+	@Override
+	public String toString() {
+		return "(" + x + "," + y + ")";
+	}
+	
 	public int getX() {
 		return x;
 	}

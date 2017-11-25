@@ -17,11 +17,11 @@ import com.mkcode.dmg.maps.Room;
 import com.mkcode.dmg.util.Coords;
 
 @RunWith(Parameterized.class)
-public class Tests {
+public class RoomTests {
 
 	private Map map;
 	
-	public Tests(Map map) {
+	public RoomTests(Map map) {
 		this.map = map;
 	}
 	

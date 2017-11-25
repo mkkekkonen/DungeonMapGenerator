@@ -8,16 +8,19 @@ import com.mkcode.dmg.util.Coords;
 public class Map {
 
 	private List<Room> rooms;
+	private List<Door> doors;
 	private List<Corridor> corridors;
 
 	private int w, h;
 	
 	public Map() {
-		this.rooms = new ArrayList<Room>();
-		this.corridors = new ArrayList<Corridor>();
+		rooms = new ArrayList<>();
+		doors = new ArrayList<>();
+		corridors = new ArrayList<>();
 	}
 
 	public Map(int w, int h, List<Room> rooms, List<Corridor> corridors) {
+		this();
 		this.w = w;
 		this.h = h;
 		this.rooms = rooms;
@@ -32,12 +35,28 @@ public class Map {
 		return false;
 	}
 	
+	public boolean isDoor(Coords coords) {
+		for(Door door : doors) {
+			if(door.getCoordsOnMap().equalz(coords))
+				return true;
+		}
+		return false;
+	}
+	
 	public List<Room> getRooms() {
 		return rooms;
 	}
 
 	public void setRooms(List<Room> rooms) {
 		this.rooms = rooms;
+	}
+	
+	public List<Door> getDoors() {
+		return doors;
+	}
+
+	public void setDoors(List<Door> doors) {
+		this.doors = doors;
 	}
 
 	public List<Corridor> getCorridors() {
