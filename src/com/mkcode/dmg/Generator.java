@@ -5,9 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import com.mkcode.dmg.maps.Corridor;
 import com.mkcode.dmg.maps.Door;
 import com.mkcode.dmg.maps.Map;
 import com.mkcode.dmg.maps.Room;
+import com.mkcode.dmg.util.AStar;
+import com.mkcode.dmg.util.AStarSquare;
 import com.mkcode.dmg.util.Cardinal;
 import com.mkcode.dmg.util.Coords;
 
@@ -19,12 +22,14 @@ public class Generator {
 		MIN_DIM = 3, // dim = min and max room dimensions
 		MAX_DIM = 10;
 	
+	private AStar pathfinder;
 	private Random random;
 	
 	private int mapWidth, mapHeight, floors;
 	
 	public Generator(int mapWidth, int mapHeight, int floors) {
 		random = new Random(System.currentTimeMillis());
+		pathfinder = new AStar();
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 		this.floors = floors;
@@ -35,8 +40,9 @@ public class Generator {
 		List<Map> mapList = new ArrayList<>();
 		
 		for(int i = 0; i < floors; i++) {
-			Map map = new Map(mapWidth, mapHeight, generateRooms(mapWidth, mapHeight), null);
+			Map map = new Map(i + 1, mapWidth, mapHeight, generateRooms(mapWidth, mapHeight));
 			generateDoors(map, map.getRooms());
+			map.setCorridors(generateCorridors(map));
 			mapList.add(map);
 		}
 		
@@ -157,5 +163,41 @@ public class Generator {
 			return false;
 		
 		return true;
+	}
+	
+	private List<Corridor> generateCorridors(Map map) {
+		List<Corridor> corridors = new ArrayList<>();
+		List<Room> rooms = map.getRooms();
+		if(map.getRooms().size() > 2) {
+			for(int i = 0; i < rooms.size() - 2; i++)
+				corridors.add(generateCorridor(map, rooms.get(i), rooms.get(i + 1)));
+			
+		}
+		if(map.getRooms().size() >= 2)
+			corridors.add(generateCorridor(map, rooms.get(rooms.size() - 1), rooms.get(0)));
+		return corridors;
+	}
+	
+	private Corridor generateCorridor(Map map, Room r1, Room r2) {
+		Corridor corridor = new Corridor(
+				r1.getDoors().get(0),
+				r2.getDoors().get(0),
+				pathfinder.findPath(
+						r1.getDoors().get(0).getCoordsOnMap(), 
+						r2.getDoors().get(0).getCoordsOnMap(), 
+						map
+				)
+		);
+		return corridor;
+	}
+	
+	private void debugFindPath(Map map) {
+		if(map.getRooms().size() == 1)
+			return;
+		map.setDebugCorridor(pathfinder.findPath(
+				map.getRooms().get(0).getDoors().get(0).getCoordsOnMap(), 
+				map.getRooms().get(1).getDoors().get(0).getCoordsOnMap(), 
+				map
+		)); 
 	}
 }

@@ -74,7 +74,7 @@ public class DoorTests {
 	// END DOOR VALIDATION TESTS
 	
 	private static Map createTestMap() {
-		return new Map(30, 30, null, null);
+		return new Map(1, 30, 30, null);
 	}
 	
 	private static Room createTestRoom() {

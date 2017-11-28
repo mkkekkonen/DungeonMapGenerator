@@ -18,6 +18,19 @@ public class Coords {
 		return x == coords.getX() && y == coords.getY();
 	}
 
+	public Coords vectorAdd(Coords coords) {
+		return new Coords(x + coords.getX(), y + coords.getY());
+	}
+	
+	public Coords vectorSub(Coords coords) {
+		return new Coords(x - coords.getX(), y - coords.getY());
+	}
+	
+	public int getDistance(Coords coords) {
+		Coords distanceXY = coords.vectorSub(this);
+		return Math.abs(distanceXY.getX()) + Math.abs(distanceXY.getY());
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + x + "," + y + ")";

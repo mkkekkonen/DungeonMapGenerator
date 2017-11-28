@@ -76,7 +76,7 @@ public class RoomTests {
 	}
 	
 	private static Map createTestMap() {
-		return new Map(8, 8, createTestRoom(), null);
+		return new Map(1, 8, 8, createTestRoom());
 	}
 	
 	private static List<Room> createTestRoom() {

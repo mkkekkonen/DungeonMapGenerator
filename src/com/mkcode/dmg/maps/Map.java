@@ -10,7 +10,10 @@ public class Map {
 	private List<Room> rooms;
 	private List<Door> doors;
 	private List<Corridor> corridors;
+	
+	private List<Coords> debugCorridor;
 
+	private int index;
 	private int w, h;
 	
 	public Map() {
@@ -19,12 +22,12 @@ public class Map {
 		corridors = new ArrayList<>();
 	}
 
-	public Map(int w, int h, List<Room> rooms, List<Corridor> corridors) {
+	public Map(int floorIndex, int w, int h, List<Room> rooms) {
 		this();
+		index = floorIndex;
 		this.w = w;
 		this.h = h;
 		this.rooms = rooms;
-		this.corridors = corridors;
 	}
 	
 	public boolean isWall(Coords coords) {
@@ -38,6 +41,39 @@ public class Map {
 	public boolean isDoor(Coords coords) {
 		for(Door door : doors) {
 			if(door.getCoordsOnMap().equalz(coords))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isInsideRoom(Coords coords) {
+		for(Room room : rooms) {
+			if(coords.getX() > room.getLeft() && coords.getX() < room.getRight()
+					&& coords.getY() > room.getTop() && coords.getY() < room.getBottom())
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isFloor(Coords coords) {
+		return !isWall(coords) && !isDoor(coords);
+	}
+	
+	public boolean isCorridor(Coords coords) {
+		for(Corridor corridor : corridors) {
+			for(Coords corrCoords : corridor.getElements()) {
+				if(corrCoords.equalz(coords))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isDebugCorridor(Coords coords) {
+		if(debugCorridor == null)
+			return false;
+		for(Coords debugCoords : debugCorridor) {
+			if(debugCoords.equalz(coords))
 				return true;
 		}
 		return false;
@@ -66,6 +102,14 @@ public class Map {
 	public void setCorridors(List<Corridor> corridors) {
 		this.corridors = corridors;
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
 	public int getW() {
 		return w;
@@ -81,5 +125,13 @@ public class Map {
 
 	public void setH(int h) {
 		this.h = h;
+	}
+
+	public List<Coords> getDebugCorridor() {
+		return debugCorridor;
+	}
+
+	public void setDebugCorridor(List<Coords> debugCorridor) {
+		this.debugCorridor = debugCorridor;
 	}
 }
