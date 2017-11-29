@@ -10,6 +10,17 @@ public class Map {
 	private List<Room> rooms;
 	private List<Door> doors;
 	private List<Corridor> corridors;
+
+	private static final Coords[] corridorOffsetsToCheck = new Coords[] {
+			new Coords(0, 1),
+			new Coords(1, -1),
+			new Coords(1, 0),
+			new Coords(1, 1),
+			new Coords(0, -1),
+			new Coords(-1, 1),
+			new Coords(-1, 0),
+			new Coords(-1, -1)
+		};
 	
 	private List<Coords> debugCorridor;
 
@@ -56,14 +67,33 @@ public class Map {
 	}
 	
 	public boolean isFloor(Coords coords) {
-		return !isWall(coords) && !isDoor(coords);
+		return !isWall(coords) && !isDoor(coords) && !isCorridor(coords);
 	}
 	
 	public boolean isCorridor(Coords coords) {
 		for(Corridor corridor : corridors) {
-			for(Coords corrCoords : corridor.getElements()) {
-				if(corrCoords.equalz(coords))
+			for(Coords corrElementCoords : corridor.getElements()) {
+				if(corrElementCoords.equalz(coords))
 					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Loop over corridors' elements, add offsets to each element
+	 * and check if the result is floor -> add wall there
+	 * @param coords
+	 * @return
+	 */
+	public boolean isCorridorWall(Coords coords) {
+		for(Corridor corridor : corridors) {
+			for(Coords corrElementCoords : corridor.getElements()) {
+				for(Coords offset : corridorOffsetsToCheck) {
+					Coords offsetCorrElement = corrElementCoords.vectorAdd(offset);
+					if(coords.equalz(offsetCorrElement) && isFloor(offsetCorrElement))
+						return true;
+				}
 			}
 		}
 		return false;

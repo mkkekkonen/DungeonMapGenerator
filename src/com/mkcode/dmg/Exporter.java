@@ -51,8 +51,8 @@ public class Exporter {
 				if(map.isDoor(coords))
 					mapStringBuilder.append("+");
 				else if(map.isCorridor(coords))
-					mapStringBuilder.append("$");
-				else if(map.isWall(coords))
+					mapStringBuilder.append(".");
+				else if(map.isWall(coords) || map.isCorridorWall(coords))
 					mapStringBuilder.append("#");
 				else
 					mapStringBuilder.append(".");
